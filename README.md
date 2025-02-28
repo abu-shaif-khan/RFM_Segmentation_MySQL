@@ -170,6 +170,15 @@ HAVING COUNT(*) > 1;
 ## Analysis the Sales Data
 
 - Highest Selling Items
+```sql
+with CTE as
+(select productline, round(sum(sales), 0) as Total_revenue, count(*) as Total_number_of_sales
+ from RFM_SALES
+	group by productline)
+select productline, Total_revenue, Total_number_of_sales,
+RANK() OVER (ORDER BY Total_revenue desc) as rank_on_revenue  from CTE
+group by productline;
+```
   -- OUTPUT --
   |productline|Total_revenue|Total_number_of_sales|rank_on_revenue|
   |-----------|-------------|---------------------|---------------|
@@ -182,6 +191,15 @@ HAVING COUNT(*) > 1;
   |Trains |226243 |77 |7 |
 
 - Top Selling Countries
+```sql
+SELECT 
+    COUNTRY, ROUND(SUM(sales), 0) AS Total_revenue
+FROM
+    RFM_SALES
+GROUP BY country
+ORDER BY Total_revenue desc
+LIMIT 5;
+```
   -- OUTPUT --
   |COUNTRY|Total_revenue|
   |-------|-------------|
@@ -192,6 +210,15 @@ HAVING COUNT(*) > 1;
   |UK |478880 |
 
 - Top Selling Cities
+```sql
+SELECT 
+    city, ROUND(SUM(sales), 0) AS Total_revenue
+FROM
+    RFM_SALES
+GROUP BY city
+ORDER BY Total_revenue desc
+limit 10;
+```
   -- OUTPUT --
   |city |Total_revenue|
   |-----|-------------|
@@ -207,6 +234,14 @@ HAVING COUNT(*) > 1;
   |Brickhaven|165255 |
 
 - Top Customers
+```sql
+SELECT
+CUSTOMERNAME, ROUND(SUM(sales), 0) AS TOTAL_SALE
+FROM RFM_SALES
+group by CUSTOMERNAME
+order by TOTAL_SALE desc
+LIMIT 5;
+```
   -- OUTPUT --
   |CUSTOMERNAME|TOTAL_SALE|
   |------------|----------|
@@ -217,6 +252,13 @@ HAVING COUNT(*) > 1;
   |La Rochelle Gifts|180125 |
 
 - What are the top selling products in November 2003?
+```sql
+select  PRODUCTLINE, ROUND(SUM(sales), 0) as Revenue, count(ORDERNUMBER) Frequency
+from RFM_SALES
+where year(orderdate) = 2003 and monthname(orderdate) = 'November' -- change year to see the rest
+group by  PRODUCTLINE
+order by Revenue desc;
+```
   -- OUTPUT --
   |PRODUCTLINE|Revenue|Frequency|
   |-----------|-------|---------|
@@ -229,6 +271,13 @@ HAVING COUNT(*) > 1;
   |Trains |22523 |9 |
 
 - What was the best selling month in total by segmenting year? How much was earned that month?
+```sql
+select YEAR(orderdate) AS order_year,
+    monthname(orderdate) AS order_month,
+    ROUND(SUM(sales), 0) as Revenue, count(ORDERNUMBER) Frequency from RFM_SALES
+GROUP BY order_year, order_month
+ORDER BY order_year, Revenue DESC;
+```	
   -- OUTPUT --
   |order_year|order_month|Revenue|Frequency|
   |----------|-----------|-------|---------|
@@ -263,6 +312,13 @@ HAVING COUNT(*) > 1;
   |2005 |April |261633 |56 |
 
 - What was the best selling month in 2003? How much was earned that month?
+```sql
+select  monthname(orderdate) as Month_name, ROUND(SUM(sales), 0) as Revenue, count(ORDERNUMBER) Frequency
+from RFM_SALES
+where year(orderdate) = 2003 -- change year to see the rest
+group by  Month_name
+order by Revenue desc;
+```
   -- OUTPUT --
   |Month_name|Revenue|Frequency|
   |----------|-------|---------|
