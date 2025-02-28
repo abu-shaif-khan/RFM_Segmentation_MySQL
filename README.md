@@ -2,7 +2,7 @@
 
 RFM segmentation is a marketing technique used to analyze customer value based on their purchasing behavior. RFM stands for **Recency**, **Frequency**, and **Monetary Value**, which are three key metrics used to segment customers. This method helps businesses identify their most valuable customers and tailor marketing strategies accordingly.
 
-## Why we should go through in this process
+## How do we segment customers?
 
 We calculate three key scores for each customer: Recency (how recently they bought something), Frequency (how often they shop), and Monetary (how much they spend). Based on these scores, we group customers into different categories like:
 
